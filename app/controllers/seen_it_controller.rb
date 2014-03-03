@@ -1,24 +1,26 @@
-class SeenItController < UITableViewController
+class SeenItController < UIViewController
+
+  def init
+    super
+    self.title = "Search for movies!"
+    self.tabBarItem = UITabBarItem.alloc.initWithTabBarSystemItem(UITabBarSystemItemSearch, tag: 1)
+    self
+  end
 
   def viewDidLoad
     super
-    @movies = []
-
-    searchBar = UISearchBar.alloc.initWithFrame(CGRectMake(0, 0, self.tableView.frame.size.width, 0))
-    searchBar.delegate = self
-    searchBar.showsCancelButton = true
-    searchBar.sizeToFit
-    view.tableHeaderView = searchBar
-    view.dataSource = view.delegate = self
-    searchBar.text = "Alien"
-
-    searchBarSearchButtonClicked(searchBar)
+    view.backgroundColor = UIColor.redColor
+    @search_bar = UISearchBar.alloc.initWithFrame([[0,0], [self.view.size.width, 150]])
+    @search_bar.placeholder = "Place keyword here"
+    @search_bar.setShowsCancelButton(true, animated:true)
+    @search_bar.resignFirstResponder
+    @search_bar.delegate = self
+    view.addSubview(@search_bar)
   end
 
   def searchBarSearchButtonClicked(searchBar)
     query = searchBar.text.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
     url = "http://www.omdbapi.com/?t=#{query}"
-    @movies.clear
     json = nil
     begin
       json = JSONParser.parse_from_url(url)
@@ -26,30 +28,27 @@ class SeenItController < UITableViewController
       presentError e.message
     end
 
-    @movies = []
-    @movies << Movie.new(json)
+    @movie = Movie.new(json)
 
-    view.reloadData
+    label = UILabel.alloc.init
+    label.frame = [[0, 150], [300, 120]]
+    label.backgroundColor = UIColor.clearColor
+    label.font = UIFont.fontWithName("HelveticaNeue-CondensedBold",size:22)
+    label.text = @movie.title
+    view.addSubview(label)
+
+    label = UILabel.alloc.init
+    label.frame = [[0, 200], [300, 500]]
+    label.backgroundColor = UIColor.clearColor
+    label.font = UIFont.fontWithName("HelveticaNeue-CondensedBold",size:15)
+    label.numberOfLines = 0
+    label.text = @movie.plot
+    view.addSubview(label)
+
     searchBar.resignFirstResponder
   end
 
   def searchBarCancelButtonClicked(searchBar)
     searchBar.resignFirstResponder
-  end
-
-  def tableView(tableView, numberOfRowsInSection:section)
-    @movies.count
-  end
-
-  def tableView(tableView, cellForRowAtIndexPath:indexPath)
-    @reuseIdentifier ||= "CELL_IDENTIFIER"
-    cell = tableView.dequeueReusableCellWithIdentifier(@reuseIdentifier) || begin
-      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:@reuseIdentifier)
-    end
-    cell.textLabel.text = @movies[indexPath.row].title
-    cell.imageView.image = UIImage.alloc.initWithData(NSData.alloc.initWithContentsOfURL(NSURL.alloc.initWithString(@movies[indexPath.row].poster)))
-    cell.detailTextLabel.text = @movies[indexPath.row].plot
-
-    cell
   end
 end
