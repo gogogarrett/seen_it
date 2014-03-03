@@ -10,8 +10,8 @@ class AppDelegate
   def createTabBar
     tab_bar_controller = UITabBarController.alloc.init
     tab_bar_controller.viewControllers = [
-      MoviesController.alloc.init,
       SeenItController.alloc.init,
+      MoviesController.alloc.init,
     ]
     tab_bar_controller
   end
