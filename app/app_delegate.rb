@@ -6,6 +6,8 @@ class AppDelegate
     @window.rootViewController = createTabBar
     true
   end
+  
+  poop
 
   def createTabBar
     seenit_tab = UINavigationController.alloc.initWithRootViewController(SeenItController.alloc.init)
