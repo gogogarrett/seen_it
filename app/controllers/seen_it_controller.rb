@@ -1,12 +1,11 @@
 class SeenItController < UITableViewController
 
-  # why does this not load?
-  # def init
-  #   super
-  #   self.title = "Search for movies!"
-  #   self.tabBarItem = UITabBarItem.alloc.initWithTabBarSystemItem(UITabBarSystemItemSearch, tag: 1)
-  #   self
-  # end
+  def init
+    super
+    self.title = "Search for movies!"
+    self.tabBarItem = UITabBarItem.alloc.initWithTabBarSystemItem(UITabBarSystemItemSearch, tag: 1)
+    self
+  end
 
   def viewDidLoad
     super

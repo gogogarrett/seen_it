@@ -9,9 +9,6 @@ class AppDelegate
 
   def createTabBar
     seenit_tab = UINavigationController.alloc.initWithRootViewController(SeenItController.alloc.init)
-    seenit_tab.title = "Seen it?" # why does nav title not show up?
-    seenit_tab.tabBarItem = UITabBarItem.alloc.initWithTabBarSystemItem(UITabBarSystemItemSearch, tag: 1)
-
     movies_tab = UINavigationController.alloc.initWithRootViewController(MoviesController.alloc.init)
 
     tab_bar = UITabBarController.alloc.init
