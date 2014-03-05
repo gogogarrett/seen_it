@@ -2,6 +2,7 @@ class DetailController < UIViewController
   attr_accessor :movie
 
   def viewDidLoad
+    App::Persistence['movies'] ||= []
     show_movie_detail
   end
 
@@ -14,6 +15,7 @@ class DetailController < UIViewController
     show_title
     show_image
     show_plot
+    seen_it_button
   end
 
   def show_title
@@ -40,5 +42,20 @@ class DetailController < UIViewController
     label.numberOfLines = 0
     label.sizeToFit
     view.addSubview(label)
+  end
+
+  def seen_it_button
+    gallery_button = UIButton.buttonWithType(UIButtonTypeRoundedRect)
+    gallery_button.frame  = [[0, 790], [200, 50]]
+    gallery_button.setTitle("Seen it!", forState:UIControlStateNormal)
+    gallery_button.addTarget(self, action: :seen_it, forControlEvents:UIControlEventTouchUpInside)
+    view.addSubview(gallery_button)
+  end
+
+  def seen_it
+    array = App::Persistence['movies'].dup
+    array << @movie.to_json
+    App::Persistence['movies'] = array
+    puts App::Persistence['movies'].inspect
   end
 end
