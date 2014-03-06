@@ -1,9 +1,10 @@
 class SeenItController < UITableViewController
+  include PresentError
 
   def init
     super
-    self.title = "Search for movies!"
-    self.tabBarItem = UITabBarItem.alloc.initWithTabBarSystemItem(UITabBarSystemItemSearch, tag: 1)
+    self.tabBarItem.image = UIImage.imageNamed('glasses.png')
+    self.title = "Seen it?"
     self
   end
 
@@ -15,24 +16,33 @@ class SeenItController < UITableViewController
     searchBar.delegate = self
     searchBar.showsCancelButton = true
     searchBar.sizeToFit
+    searchBar.placeholder = "Search for a movie.."
     view.tableHeaderView = searchBar
     view.dataSource = view.delegate = self
-    searchBar.text = "Alien"
-    searchBarSearchButtonClicked(searchBar)
+    # searchBar.text = "Alien"
+    # searchBarSearchButtonClicked(searchBar)
   end
 
   def searchBarSearchButtonClicked(searchBar)
     query = searchBar.text.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
-    url = "http://www.omdbapi.com/?t=#{query}"
+    url = "http://www.omdbapi.com/?s=#{query}"
     json = nil
     @movies.clear
+
+    # abstract this so I don't have to duplicate it.
     begin
       json = JSONParser.parse_from_url(url)
     rescue RuntimeError => e
       presentError e.message
     end
 
-    @movies << Movie.new(json)
+    if json['Response'] == "False"
+      presentError(json["Error"])
+    else
+      json["Search"].each do |movie_json|
+        @movies << Movie.new(movie_json)
+      end
+    end
 
     view.reloadData
     searchBar.resignFirstResponder
@@ -52,15 +62,27 @@ class SeenItController < UITableViewController
       UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:@reuseIdentifier)
     end
     cell.textLabel.text = @movies[indexPath.row].title
-    cell.imageView.image = UIImage.alloc.initWithData(NSData.alloc.initWithContentsOfURL(NSURL.alloc.initWithString(@movies[indexPath.row].poster)))
-    cell.detailTextLabel.text = @movies[indexPath.row].plot
-
     cell
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
-    detail_controller = DetailController.alloc.init
-    detail_controller.movie = @movies[indexPath.row]
-    self.navigationController.pushViewController(detail_controller, animated: true)
+    movie = @movies[indexPath.row]
+    url = "http://www.omdbapi.com/?i=#{movie.imdb_id}"
+    json = nil
+
+    begin
+      json = JSONParser.parse_from_url(url)
+    rescue RuntimeError => e
+      presentError e.message
+    end
+
+    if json['Response'] == "False"
+      presentError(json["Error"])
+    else
+      movie = Movie.new(json)
+      detail_controller = DetailController.alloc.init
+      detail_controller.movie = movie
+      self.navigationController.pushViewController(detail_controller, animated: true)
+    end
   end
 end
