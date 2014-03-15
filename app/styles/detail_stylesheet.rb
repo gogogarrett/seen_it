@@ -1,84 +1,26 @@
 class DetailStylesheet
   class << self
-    def title
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
-      end
+
+    def common_fields(l)
+      l.textColor = UIColor.darkGrayColor
+      l.setAdjustsFontSizeToFitWidth(true)
+      l.lineBreakMode = UILineBreakModeWordWrap;
+      l.numberOfLines = 0
     end
 
-    def imdb_rating
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
+    def general_label
+      UILabel.new.tap { |label| common_fields(label) }
+    end
+
+    def size_to_fit_general_label
+      general_label.tap do |label|
+        label.sizeToFit
       end
     end
 
     def movie_image
       UIImageView.alloc.init.tap do |iv|
         # iv.image = UIImage.alloc.initWithData(NSData.alloc.initWithContentsOfURL(NSURL.URLWithString(@movie.poster)))
-      end
-    end
-
-    def movie_year
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
-        l.sizeToFit
-      end
-    end
-
-    def movie_rated
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
-      end
-    end
-
-    def movie_genre
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
-        l.sizeToFit
-      end
-    end
-
-    def movie_directors
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
-      end
-    end
-
-    def movie_actors
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
-        l.sizeToFit
-      end
-    end
-
-    def movie_plot
-      UILabel.new.tap do |l|
-        l.textColor = UIColor.darkGrayColor
-        l.setAdjustsFontSizeToFitWidth(true)
-        l.lineBreakMode = UILineBreakModeWordWrap;
-        l.numberOfLines = 0
-        l.sizeToFit
       end
     end
 
