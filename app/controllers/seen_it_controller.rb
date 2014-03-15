@@ -19,8 +19,8 @@ class SeenItController < UITableViewController
     searchBar.placeholder = "Search for a movie.."
     view.tableHeaderView = searchBar
     view.dataSource = view.delegate = self
-    # searchBar.text = "Alien"
-    # searchBarSearchButtonClicked(searchBar)
+    searchBar.text = "Alien"
+    searchBarSearchButtonClicked(searchBar)
   end
 
   def searchBarSearchButtonClicked(searchBar)
