@@ -20,7 +20,6 @@ class DetailStylesheet
 
     def movie_image
       UIImageView.alloc.init.tap do |iv|
-        # iv.image = UIImage.alloc.initWithData(NSData.alloc.initWithContentsOfURL(NSURL.URLWithString(@movie.poster)))
       end
     end
 
