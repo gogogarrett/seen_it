@@ -13,7 +13,9 @@ class MoviesController < UIViewController
   end
 
   def viewWillAppear(animated)
-    add_seen_movies
+    Twitter.sign_in do |granted, error|
+      add_seen_movies if granted
+    end
   end
 
   def viewDidLoad
@@ -48,12 +50,35 @@ class MoviesController < UIViewController
           [250, 50]
         ]
       else
-        label.frame = [[20, 30], [250, 50]]
+        label.frame = [[20, 30], [100, 50]]
       end
 
       @last_label = label
-
       view.addSubview(label)
+
+      compose = UIButton.buttonWithType(UIButtonTypeRoundedRect)
+      compose.setTitle("Share", forState:UIControlStateNormal)
+      compose.sizeToFit
+      if !@last_label.nil?
+        compose.frame = [
+          [230, @last_label.frame.origin.y],
+          [100, 50]
+        ]
+      else
+        compose.frame = [[230, 30], [100, 50]]
+      end
+
+      compose.when UIControlEventTouchUpInside do
+        account = Twitter.accounts[0]
+        account.compose(tweet: "I've seen #{movie.title} via seen_it!") do |composer|
+          p "Done? #{composer.done?}"
+          p "Cancelled? #{composer.cancelled?}"
+          p "Error #{composer.error.inspect}"
+        end
+      end
+
+      view.addSubview(compose)
+
     end
   end
 end

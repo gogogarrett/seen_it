@@ -4,6 +4,7 @@ class AppDelegate
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
     @window.makeKeyAndVisible
     @window.rootViewController = createTabBar
+
     true
   end
 

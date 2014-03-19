@@ -3,6 +3,8 @@ GEM
   specs:
     bubble-wrap (1.5.0)
     rake (10.1.1)
+    twittermotion (0.0.2)
+      bubble-wrap (>= 1.1.2)
 
 PLATFORMS
   ruby
@@ -10,3 +12,4 @@ PLATFORMS
 DEPENDENCIES
   bubble-wrap
   rake
+  twittermotion
